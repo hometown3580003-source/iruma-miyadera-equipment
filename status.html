@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>備品管理板 | りらくる入間宮寺店</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@600;700;800&family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F5F6F0;
+    --card:#FFFFFF;
+    --ink:#22302A;
+    --ink-soft:#5C6B62;
+    --ink-faint:#93A199;
+    --line:#DEE3D8;
+    --sage:#4F6E58;
+    --sage-deep:#33473A;
+    --amber:#A9781F;
+    --brick:#9C4B3D;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Noto Sans JP', sans-serif;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+  }
+  .wrap{max-width:640px;margin:0 auto;padding:0 0 64px;}
+
+  header{
+    padding:26px 20px 18px;
+    border-bottom:1px solid var(--line);
+    background:var(--card);
+  }
+  .eyebrow{font-size:12.5px;color:var(--sage);letter-spacing:.04em;margin:0 0 4px;}
+  h1{
+    font-family:'Shippori Mincho', serif;
+    font-weight:700;
+    font-size:24px;
+    margin:0 0 6px;
+    color:var(--sage-deep);
+    letter-spacing:.02em;
+  }
+  .sub{font-size:13px;color:var(--ink-soft);margin:0;}
+
+  .tabbar{
+    display:flex;
+    gap:8px;
+    padding:14px 16px;
+    overflow-x:auto;
+    background:var(--card);
+    border-bottom:1px solid var(--line);
+    -webkit-overflow-scrolling:touch;
+  }
+  .tabbar::-webkit-scrollbar{display:none;}
+  .tab{
+    flex:none;
+    display:flex;align-items:center;gap:6px;
+    padding:8px 13px;
+    border-radius:999px;
+    border:1px solid var(--line);
+    background:#fff;
+    font-size:13px;
+    color:var(--ink-soft);
+    cursor:pointer;
+    white-space:nowrap;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .tab .tdot{width:8px;height:8px;border-radius:50%;flex:none;}
+  .tab.active{
+    color:#fff;
+    border-color:transparent;
+    font-weight:600;
+  }
+
+  .summary{display:flex;gap:10px;padding:16px 20px 4px;}
+  .sum-item{flex:1;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;}
+  .sum-num{font-size:20px;font-weight:700;font-variant-numeric:tabular-nums;}
+  .sum-label{font-size:11px;color:var(--ink-soft);margin-top:2px;}
+  .sum-item.overdue .sum-num{color:var(--brick);}
+  .sum-item.soon .sum-num{color:var(--amber);}
+  .sum-item.ok .sum-num{color:var(--sage);}
+
+  .list{padding:14px 14px 0;display:flex;flex-direction:column;gap:8px;}
+
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;transition:border-color .15s ease;}
+  .card.state-overdue{border-color:rgba(156,75,61,.35);}
+  .card.state-soon{border-color:rgba(169,120,31,.3);}
+
+  .row{display:flex;align-items:center;gap:12px;padding:14px 14px;cursor:pointer;-webkit-tap-highlight-color:transparent;}
+  .dot{width:9px;height:9px;border-radius:50%;flex:none;background:var(--sage);}
+  .state-soon .dot{background:var(--amber);}
+  .state-overdue .dot{background:var(--brick);}
+
+  .row-main{flex:1;min-width:0;}
+  .name{font-family:'Shippori Mincho', serif;font-weight:600;font-size:16px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .last-info{font-size:11.5px;color:var(--ink-soft);margin-top:2px;}
+
+  .days-box{text-align:right;flex:none;}
+  .days-num{font-size:22px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1;color:var(--sage);}
+  .state-soon .days-num{color:var(--amber);}
+  .state-overdue .days-num{color:var(--brick);}
+  .days-unit{font-size:10.5px;color:var(--ink-faint);}
+  .days-num.never{font-size:13px;color:var(--brick);}
+
+  .panel{max-height:0;overflow:hidden;transition:max-height .25s ease;border-top:1px solid transparent;}
+  .card.open .panel{max-height:520px;border-top:1px solid var(--line);}
+  .panel-inner{padding:14px;background:#FBFBF9;}
+
+  .field-label{font-size:11.5px;color:var(--ink-soft);margin-bottom:6px;}
+  .field-row{display:flex;gap:8px;}
+  .field-row > div{flex:1;}
+  select, input[type=date]{
+    width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:#fff;
+    font-family:inherit;font-size:14.5px;color:var(--ink);margin-bottom:10px;
+  }
+  .btn{width:100%;padding:12px;border:none;border-radius:8px;background:var(--sage);color:#fff;
+    font-family:inherit;font-size:14.5px;font-weight:600;letter-spacing:.02em;cursor:pointer;}
+  .btn:disabled{background:#C8CFC5;cursor:not-allowed;}
+  .btn:active:not(:disabled){background:var(--sage-deep);}
+
+  .history{margin-top:14px;}
+  .history-title{font-size:11.5px;color:var(--ink-soft);margin-bottom:6px;}
+  .hist-row{display:flex;justify-content:space-between;align-items:center;font-size:12.5px;color:var(--ink-soft);padding:6px 0;border-top:1px solid var(--line);}
+  .hist-row:first-child{border-top:none;}
+  .hist-del{background:none;border:none;color:var(--brick);font-size:11.5px;cursor:pointer;text-decoration:underline;padding:0;}
+
+  .loading, .err, .empty{padding:40px 20px;text-align:center;color:var(--ink-soft);font-size:13.5px;}
+  .err{color:var(--brick);}
+  footer{padding:22px 20px 0;font-size:11px;color:var(--ink-faint);line-height:1.7;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <p class="eyebrow">りらくる入間宮寺店</p>
+    <h1>備品 清掃・洗濯 管理板</h1>
+    <p class="sub" id="todayLine"></p>
+  </header>
+
+  <div class="tabbar" id="tabbar"></div>
+  <div class="summary" id="summary"></div>
+  <div id="listRoot"><div class="loading">読み込み中…</div></div>
+
+  <footer>
+    誰が・いつ行ったかを記録すると全員に共有されます。日付は今日以外（後日まとめて記録する場合など）も選べます。目安日数は仮の設定です。実態に合わせて調整してください。
+  </footer>
+</div>
+
+<script>
+// ここに、Google Apps Script をウェブアプリとしてデプロイしたときに発行される URL を貼り付けてください。
+// 例: "https://script.google.com/macros/s/XXXXXXXXXXXXXXXX/exec"
+const GAS_URL = "YOUR_WEB_APP_URL_HERE";
+
+const THERAPISTS = [
+  "金丸","重田 将希","アリガ","もりや","シダ","荒井 剛","杏（あんず）","秋元",
+  "久保","ぐっちー","ソノベ","サトウ","石田 周平","平野 陽子","粟野 幸子","ヤマギワ","川田"
+];
+
+// target = 目安日数（この日数を超えたら「そろそろ／要対応」の色になります）。必要に応じて調整してください。
+const ITEMS = [
+  {id:"fan_in_1", cat:"室内扇風機", name:"室内扇風機 ①", target:14},
+  {id:"fan_in_2", cat:"室内扇風機", name:"室内扇風機 ②", target:14},
+  {id:"fan_in_3", cat:"室内扇風機", name:"室内扇風機 ③", target:14},
+  {id:"fan_in_4", cat:"室内扇風機", name:"室内扇風機 ④", target:14},
+  {id:"fan_in_5", cat:"室内扇風機", name:"室内扇風機 ⑤", target:14},
+
+  {id:"pillow_cover", cat:"枕", name:"枕カバー 洗濯", target:7},
+  {id:"pillow_sun",   cat:"枕", name:"枕 天日干し", target:14},
+  {id:"pillow_wash",  cat:"枕", name:"枕本体 洗濯", target:30},
+
+  {id:"sheet_1", cat:"プレミアムベッド", name:"シーツ ① 洗濯", target:3},
+  {id:"sheet_2", cat:"プレミアムベッド", name:"シーツ ② 洗濯", target:3},
+
+  {id:"circ_1", cat:"サーキュレーター", name:"サーキュレーター ①", target:14},
+  {id:"circ_2", cat:"サーキュレーター", name:"サーキュレーター ②", target:14},
+
+  {id:"garage_1", cat:"ガレージ扇風機", name:"ガレージ扇風機 ①", target:14},
+  {id:"garage_2", cat:"ガレージ扇風機", name:"ガレージ扇風機 ②", target:14},
+  {id:"garage_3", cat:"ガレージ扇風機", name:"ガレージ扇風機 ③", target:14},
+
+  {id:"ac_1", cat:"天井エアコン", name:"エアコンフィルター ①", target:30},
+  {id:"ac_2", cat:"天井エアコン", name:"エアコンフィルター ②", target:30},
+  {id:"ac_3", cat:"天井エアコン", name:"エアコンフィルター ③", target:30},
+  {id:"ac_4", cat:"天井エアコン", name:"エアコンフィルター ④", target:30},
+
+  {id:"toilet_fan", cat:"トイレ", name:"換気扇 清掃", target:30},
+];
+
+const CATS = [
+  {key:"室内扇風機",     accent:"#3E6E86", pale:"#E4EBEF"},
+  {key:"枕",             accent:"#8A6B2E", pale:"#F3ECDA"},
+  {key:"プレミアムベッド", accent:"#7A4F6E", pale:"#F1E6EE"},
+  {key:"サーキュレーター", accent:"#4F6E45", pale:"#E6ECE2"},
+  {key:"ガレージ扇風機",  accent:"#9C5A3D", pale:"#F2E2DA"},
+  {key:"天井エアコン",    accent:"#2E7A78", pale:"#DFEEED"},
+  {key:"トイレ",         accent:"#5B5F7A", pale:"#E4E5EC"},
+];
+
+let state = {};        // { itemId: [ {recordId, date, person}, ... newest first ] }
+let openId = null;
+let activeCat = CATS[0].key;
+let loadError = null;
+
+const $ = (sel) => document.querySelector(sel);
+const listRoot = $("#listRoot");
+const summaryRoot = $("#summary");
+const tabbarRoot = $("#tabbar");
+
+function todayISO(){
+  const d = new Date();
+  return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+}
+function fmtDate(iso){
+  const [y,m,d] = iso.split("-");
+  return `${m}/${d}`;
+}
+function daysBetween(iso){
+  const [y,m,d] = iso.split("-").map(Number);
+  const then = new Date(y, m-1, d);
+  const now = new Date();
+  const nowMid = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  return Math.round((nowMid - then) / 86400000);
+}
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+function catInfo(key){ return CATS.find(c => c.key === key) || CATS[0]; }
+
+function getLast(item){
+  const list = state[item.id];
+  return (list && list.length) ? list[0] : null;
+}
+function severity(item){
+  const last = getLast(item);
+  if(!last) return {level:"overdue", days:null};
+  const days = daysBetween(last.date);
+  const ratio = days / item.target;
+  if(ratio >= 1) return {level:"overdue", days};
+  if(ratio >= 0.7) return {level:"soon", days};
+  return {level:"ok", days};
+}
+
+function renderTabs(){
+  tabbarRoot.innerHTML = CATS.map(c => {
+    const active = c.key === activeCat;
+    const style = active ? `background:${c.accent};` : "";
+    const dotStyle = `background:${active ? "#fff" : c.accent};`;
+    return `<div class="tab ${active ? "active" : ""}" data-cat="${escapeHtml(c.key)}" style="${style}">
+      <span class="tdot" style="${dotStyle}"></span>${escapeHtml(c.key)}
+    </div>`;
+  }).join("");
+  tabbarRoot.querySelectorAll(".tab").forEach(el => {
+    el.addEventListener("click", () => { activeCat = el.dataset.cat; openId = null; render(); });
+  });
+}
+
+function renderSummary(rows){
+  const counts = {overdue:0, soon:0, ok:0};
+  rows.forEach(r => counts[r.sev.level]++);
+  summaryRoot.innerHTML = `
+    <div class="sum-item overdue"><div class="sum-num">${counts.overdue}</div><div class="sum-label">要対応</div></div>
+    <div class="sum-item soon"><div class="sum-num">${counts.soon}</div><div class="sum-label">そろそろ</div></div>
+    <div class="sum-item ok"><div class="sum-num">${counts.ok}</div><div class="sum-label">問題なし</div></div>
+  `;
+}
+
+function render(){
+  renderTabs();
+
+  if(loadError){
+    listRoot.innerHTML = `<div class="err">読み込みに失敗しました。${escapeHtml(loadError)}</div>`;
+    summaryRoot.innerHTML = "";
+    return;
+  }
+
+  const catItems = ITEMS.filter(i => i.cat === activeCat);
+  const rows = catItems.map(item => ({item, sev: severity(item)}));
+  renderSummary(rows);
+
+  const order = {overdue:0, soon:1, ok:2};
+  rows.sort((a,b) => {
+    if(order[a.sev.level] !== order[b.sev.level]) return order[a.sev.level]-order[b.sev.level];
+    const da = a.sev.days === null ? 9999 : a.sev.days;
+    const db = b.sev.days === null ? 9999 : b.sev.days;
+    return db - da;
+  });
+
+  listRoot.innerHTML = `<div class="list">${rows.map(r => cardHTML(r.item, r.sev)).join("")}</div>`;
+
+  rows.forEach(r => {
+    const card = document.getElementById("card-"+r.item.id);
+    card.querySelector(".row").addEventListener("click", () => toggleCard(r.item.id));
+    const btn = card.querySelector(".record-btn");
+    const sel = card.querySelector(".person-select");
+    const dateInput = card.querySelector(".date-input");
+    const updateBtn = () => { btn.disabled = !(sel.value && dateInput.value); };
+    if(sel) sel.addEventListener("change", updateBtn);
+    if(dateInput) dateInput.addEventListener("change", updateBtn);
+    if(btn) btn.addEventListener("click", (e) => { e.stopPropagation(); recordAction(r.item.id, dateInput.value, sel.value); });
+    card.querySelectorAll(".hist-del").forEach(delBtn => {
+      delBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        deleteRecord(r.item.id, delBtn.dataset.recordId);
+      });
+    });
+  });
+}
+
+function cardHTML(item, sev){
+  const last = getLast(item);
+  const isOpen = openId === item.id;
+  const daysLabel = sev.days === null
+    ? `<div class="days-num never">未記録</div>`
+    : `<div class="days-num">${sev.days}</div><div class="days-unit">日経過</div>`;
+  const lastInfo = last ? `前回 ${fmtDate(last.date)}・${escapeHtml(last.person)}` : "まだ記録がありません";
+
+  const history = (state[item.id] || []).slice(0,5);
+  const histHTML = history.length
+    ? `<div class="history">
+         <div class="history-title">履歴</div>
+         ${history.map(h => `<div class="hist-row"><span>${fmtDate(h.date)}・${escapeHtml(h.person)}</span><button class="hist-del" data-record-id="${escapeHtml(h.recordId)}">取消</button></div>`).join("")}
+       </div>`
+    : "";
+
+  const options = `<option value="">担当者を選択</option>` + THERAPISTS.map(t => `<option value="${escapeHtml(t)}">${escapeHtml(t)}</option>`).join("");
+
+  return `
+    <div class="card state-${sev.level} ${isOpen ? "open" : ""}" id="card-${item.id}">
+      <div class="row">
+        <div class="dot"></div>
+        <div class="row-main">
+          <div class="name">${escapeHtml(item.name)}</div>
+          <div class="last-info">${lastInfo}</div>
+        </div>
+        <div class="days-box">${daysLabel}</div>
+      </div>
+      <div class="panel">
+        <div class="panel-inner">
+          <div class="field-row">
+            <div>
+              <div class="field-label">実施した人</div>
+              <select class="person-select">${options}</select>
+            </div>
+            <div>
+              <div class="field-label">実施日</div>
+              <input type="date" class="date-input" value="${todayISO()}" max="${todayISO()}">
+            </div>
+          </div>
+          <button class="btn record-btn" disabled>この内容で記録する</button>
+          ${histHTML}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function toggleCard(id){
+  openId = (openId === id) ? null : id;
+  render();
+}
+
+async function apiGet(){
+  const res = await fetch(GAS_URL + "?action=list");
+  if(!res.ok) throw new Error("サーバーエラー ("+res.status+")");
+  const data = await res.json();
+  if(!data.ok) throw new Error(data.error || "不明なエラー");
+  return data.records;
+}
+
+async function apiAdd(record){
+  const res = await fetch(GAS_URL, {
+    method: "POST",
+    headers: {"Content-Type": "text/plain;charset=utf-8"},
+    body: JSON.stringify({action:"add", ...record})
+  });
+  const data = await res.json();
+  if(!data.ok) throw new Error(data.error || "保存に失敗しました");
+}
+
+async function apiDelete(recordId){
+  const res = await fetch(GAS_URL, {
+    method: "POST",
+    headers: {"Content-Type": "text/plain;charset=utf-8"},
+    body: JSON.stringify({action:"delete", recordId})
+  });
+  const data = await res.json();
+  if(!data.ok) throw new Error(data.error || "削除に失敗しました");
+}
+
+function rebuildStateFromRecords(records){
+  state = {};
+  records.forEach(r => {
+    if(!state[r.itemId]) state[r.itemId] = [];
+    state[r.itemId].push({recordId: r.recordId, date: r.date, person: r.person, recordedAt: r.recordedAt});
+  });
+  Object.values(state).forEach(list => {
+    list.sort((a,b) => (b.date + b.recordedAt).localeCompare(a.date + a.recordedAt));
+  });
+}
+
+async function loadAll(){
+  const records = await apiGet();
+  rebuildStateFromRecords(records);
+}
+
+async function recordAction(itemId, date, person){
+  if(!date || !person) return;
+  const recordId = (crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.random());
+  if(!state[itemId]) state[itemId] = [];
+  state[itemId].unshift({recordId, date, person, recordedAt: new Date().toISOString()});
+  state[itemId].sort((a,b) => (b.date + b.recordedAt).localeCompare(a.date + a.recordedAt));
+  render();
+  try{
+    await apiAdd({recordId, itemId, date, person});
+  }catch(e){
+    alert("保存に失敗しました。通信状況を確認してもう一度お試しください。");
+    await refresh();
+  }
+}
+
+async function deleteRecord(itemId, recordId){
+  if(!confirm("この記録を取り消します。よろしいですか？")) return;
+  const list = state[itemId] || [];
+  const idx = list.findIndex(r => r.recordId === recordId);
+  if(idx >= 0) list.splice(idx,1);
+  render();
+  try{
+    await apiDelete(recordId);
+  }catch(e){
+    alert("削除に失敗しました。通信状況を確認してもう一度お試しください。");
+    await refresh();
+  }
+}
+
+async function refresh(){
+  try{
+    loadError = null;
+    await loadAll();
+  }catch(e){
+    loadError = String(e.message || e);
+  }
+  render();
+}
+
+async function init(){
+  $("#todayLine").textContent = new Date().toLocaleDateString("ja-JP", {year:"numeric", month:"long", day:"numeric", weekday:"short"});
+  if(!GAS_URL || GAS_URL === "YOUR_WEB_APP_URL_HERE"){
+    loadError = "GAS_URL が設定されていません。コード内の GAS_URL に、デプロイした Google Apps Script のURLを貼り付けてください。";
+    render();
+    return;
+  }
+  listRoot.innerHTML = `<div class="loading">読み込み中…</div>`;
+  await refresh();
+}
+
+init();
+</script>
+</body>
+</html>
