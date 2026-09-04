@@ -84,6 +84,19 @@
   .sum-item.soon .sum-num{color:var(--amber);}
   .sum-item.ok .sum-num{color:var(--sage);}
 
+  .overview{padding:14px 16px 6px;background:var(--card);border-bottom:1px solid var(--line);}
+  .overview-title{font-size:11px;color:var(--ink-faint);margin-bottom:8px;letter-spacing:.03em;}
+  .ov-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(54px,1fr));gap:6px;}
+  .ov-tile{border-radius:8px;padding:6px 2px;text-align:center;cursor:pointer;background:#EEF0EA;-webkit-tap-highlight-color:transparent;}
+  .ov-tile.state-ok{background:#E9EFE7;}
+  .ov-tile.state-soon{background:#F6ECD8;}
+  .ov-tile.state-overdue{background:#F5E1DD;}
+  .ov-label{font-size:9.5px;color:var(--ink-soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .ov-days{font-size:13px;font-weight:700;font-variant-numeric:tabular-nums;color:var(--sage);margin-top:2px;line-height:1;}
+  .ov-tile.state-soon .ov-days{color:var(--amber);}
+  .ov-tile.state-overdue .ov-days{color:var(--brick);}
+  .ov-days.never{font-size:10px;color:var(--brick);}
+
   .list{padding:14px 14px 0;display:flex;flex-direction:column;gap:8px;}
 
   .card{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;transition:border-color .15s ease;}
@@ -141,6 +154,7 @@
     <p class="sub" id="todayLine"></p>
   </header>
 
+  <div class="overview" id="overview"></div>
   <div class="tabbar" id="tabbar"></div>
   <div class="summary" id="summary"></div>
   <div id="listRoot"><div class="loading">読み込み中…</div></div>
@@ -151,9 +165,9 @@
 </div>
 
 <script>
-// ここに、Google Apps Script をウェブアプリとしてデプロイしたときに発行される URL を貼り付けてください。
-// 例: "https://script.google.com/macros/s/XXXXXXXXXXXXXXXX/exec"
-const GAS_URL = "https://script.google.com/macros/s/AKfycbwCNWCQl5-sOK-hgx0VOLsFWOS0FGyyrIfdevOsXap0Nu_ZK6-LGVHnlsO8XxK5RLel/exec";
+// ここに、Google Apps Script をウェブアプリとしてデプロイしたときに発行される URL を、ダブルクォーテーションの中に貼り付けてください。
+// 例: const GAS_URL = "https://script.google.com/macros/s/XXXXXXXXXXXXXXXX/exec";
+const GAS_URL = "";
 
 const THERAPISTS = [
   "金丸","重田 将希","アリガ","もりや","シダ","荒井 剛","杏（あんず）","秋元",
@@ -189,6 +203,16 @@ const ITEMS = [
 
   {id:"toilet_fan", cat:"トイレ", name:"換気扇 清掃", target:30},
 ];
+
+const SHORT_LABELS = {
+  fan_in_1:"扇①", fan_in_2:"扇②", fan_in_3:"扇③", fan_in_4:"扇④", fan_in_5:"扇⑤",
+  pillow_cover:"枕カバー", pillow_sun:"枕干し", pillow_wash:"枕本体",
+  sheet_1:"シ①", sheet_2:"シ②",
+  circ_1:"サ①", circ_2:"サ②",
+  garage_1:"ガ①", garage_2:"ガ②", garage_3:"ガ③",
+  ac_1:"エ①", ac_2:"エ②", ac_3:"エ③", ac_4:"エ④",
+  toilet_fan:"換気扇"
+};
 
 const CATS = [
   {key:"室内扇風機",     accent:"#3E6E86", pale:"#E4EBEF"},
@@ -244,6 +268,37 @@ function severity(item){
   return {level:"ok", days};
 }
 
+function renderOverview(){
+  const rows = ITEMS.map(item => ({item, sev: severity(item)}));
+  const order = {overdue:0, soon:1, ok:2};
+  rows.sort((a,b) => {
+    if(order[a.sev.level] !== order[b.sev.level]) return order[a.sev.level]-order[b.sev.level];
+    const da = a.sev.days === null ? 9999 : a.sev.days;
+    const db = b.sev.days === null ? 9999 : b.sev.days;
+    return db - da;
+  });
+  const tiles = rows.map(r => {
+    const label = SHORT_LABELS[r.item.id] || r.item.name;
+    const daysHTML = r.sev.days === null ? `<div class="ov-days never">未</div>` : `<div class="ov-days">${r.sev.days}</div>`;
+    return `<div class="ov-tile state-${r.sev.level}" data-cat="${escapeHtml(r.item.cat)}" title="${escapeHtml(r.item.name)}">
+      <div class="ov-label">${escapeHtml(label)}</div>
+      ${daysHTML}
+    </div>`;
+  }).join("");
+  document.getElementById("overview").innerHTML = `
+    <div class="overview-title">全体マップ（タップでタブ移動）</div>
+    <div class="ov-grid">${tiles}</div>
+  `;
+  document.querySelectorAll(".ov-tile").forEach(el => {
+    el.addEventListener("click", () => {
+      activeCat = el.dataset.cat;
+      openId = null;
+      render();
+      tabbarRoot.scrollIntoView({behavior:"smooth", block:"start"});
+    });
+  });
+}
+
 function renderTabs(){
   tabbarRoot.innerHTML = CATS.map(c => {
     const active = c.key === activeCat;
@@ -274,8 +329,11 @@ function render(){
   if(loadError){
     listRoot.innerHTML = `<div class="err">読み込みに失敗しました。${escapeHtml(loadError)}</div>`;
     summaryRoot.innerHTML = "";
+    document.getElementById("overview").innerHTML = "";
     return;
   }
+
+  renderOverview();
 
   const catItems = ITEMS.filter(i => i.cat === activeCat);
   const rows = catItems.map(item => ({item, sev: severity(item)}));
@@ -448,7 +506,7 @@ async function refresh(){
 
 async function init(){
   $("#todayLine").textContent = new Date().toLocaleDateString("ja-JP", {year:"numeric", month:"long", day:"numeric", weekday:"short"});
-  if(!GAS_URL) {
+  if(!GAS_URL){
     loadError = "GAS_URL が設定されていません。コード内の GAS_URL に、デプロイした Google Apps Script のURLを貼り付けてください。";
     render();
     return;
