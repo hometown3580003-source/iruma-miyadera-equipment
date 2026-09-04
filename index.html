@@ -34,6 +34,10 @@
     padding:26px 20px 18px;
     border-bottom:1px solid var(--line);
     background:var(--card);
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:12px;
   }
   .eyebrow{font-size:12.5px;color:var(--sage);letter-spacing:.04em;margin:0 0 4px;}
   h1{
@@ -45,36 +49,69 @@
     letter-spacing:.02em;
   }
   .sub{font-size:13px;color:var(--ink-soft);margin:0;}
+  .gear-btn{
+    flex:none;
+    width:38px;height:38px;
+    border-radius:10px;
+    border:1px solid var(--line);
+    background:#fff;
+    color:var(--ink-soft);
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;
+    margin-top:2px;
+  }
+  .gear-btn svg{width:19px;height:19px;}
+
+  .settings-panel{display:none;background:var(--card);border-bottom:1px solid var(--line);padding:16px 20px 20px;}
+  .settings-panel.open{display:block;}
+  .settings-title{font-size:13px;font-weight:600;color:var(--ink);margin:0 0 4px;}
+  .settings-desc{font-size:11.5px;color:var(--ink-soft);margin:0 0 14px;}
+  .settings-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-top:1px solid var(--line);}
+  .settings-row:first-of-type{border-top:none;}
+  .settings-cat{flex:1;font-size:13px;color:var(--ink);display:flex;align-items:center;gap:8px;}
+  .settings-cat .icon-mini{width:18px;height:18px;color:var(--ink-soft);flex:none;}
+  .settings-fields{display:flex;gap:8px;flex:none;}
+  .settings-field{display:flex;flex-direction:column;align-items:center;gap:2px;}
+  .settings-field label{font-size:9.5px;color:var(--ink-faint);}
+  .settings-field input{
+    width:54px;padding:6px 4px;text-align:center;border:1px solid var(--line);border-radius:6px;
+    font-family:inherit;font-size:13px;color:var(--ink);
+  }
+  .settings-actions{display:flex;gap:8px;margin-top:16px;}
+  .settings-actions .btn{padding:10px;}
+  .btn-ghost{background:#fff;color:var(--ink-soft);border:1px solid var(--line);}
+  .settings-msg{font-size:11.5px;margin-top:10px;color:var(--sage);}
+  .settings-msg.err{color:var(--brick);}
 
   .tabbar{
-    display:flex;
-    gap:8px;
-    padding:14px 16px;
-    overflow-x:auto;
-    background:var(--card);
-    border-bottom:1px solid var(--line);
+    display:flex;gap:8px;padding:14px 16px;overflow-x:auto;
+    background:var(--card);border-bottom:1px solid var(--line);
     -webkit-overflow-scrolling:touch;
   }
   .tabbar::-webkit-scrollbar{display:none;}
   .tab{
-    flex:none;
-    display:flex;align-items:center;gap:6px;
-    padding:8px 13px;
-    border-radius:999px;
-    border:1px solid var(--line);
-    background:#fff;
-    font-size:13px;
-    color:var(--ink-soft);
-    cursor:pointer;
-    white-space:nowrap;
-    -webkit-tap-highlight-color:transparent;
+    flex:none;display:flex;align-items:center;gap:6px;
+    padding:8px 13px;border-radius:999px;border:1px solid var(--line);
+    background:#fff;font-size:13px;color:var(--ink-soft);cursor:pointer;
+    white-space:nowrap;-webkit-tap-highlight-color:transparent;
   }
   .tab .tdot{width:8px;height:8px;border-radius:50%;flex:none;}
-  .tab.active{
-    color:#fff;
-    border-color:transparent;
-    font-weight:600;
-  }
+  .tab.active{color:#fff;border-color:transparent;font-weight:600;}
+
+  .overview{padding:14px 16px 6px;background:var(--card);border-bottom:1px solid var(--line);}
+  .overview-title{font-size:11px;color:var(--ink-faint);margin-bottom:8px;letter-spacing:.03em;}
+  .ov-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(54px,1fr));gap:6px;}
+  .ov-tile{border-radius:8px;padding:6px 2px;text-align:center;cursor:pointer;background:#EEF0EA;-webkit-tap-highlight-color:transparent;}
+  .ov-tile.state-ok{background:#E9EFE7;}
+  .ov-tile.state-soon{background:#F6ECD8;}
+  .ov-tile.state-overdue{background:#F5E1DD;}
+  .ov-icon{margin:0 auto 3px;}
+  .ov-icon svg{width:18px;height:18px;display:block;color:var(--ink-soft);}
+  .ov-label{font-size:9.5px;color:var(--ink-soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .ov-days{font-size:13px;font-weight:700;font-variant-numeric:tabular-nums;color:var(--sage);margin-top:2px;line-height:1;}
+  .ov-tile.state-soon .ov-days{color:var(--amber);}
+  .ov-tile.state-overdue .ov-days{color:var(--brick);}
+  .ov-days.never{font-size:10px;color:var(--brick);}
 
   .summary{display:flex;gap:10px;padding:16px 20px 4px;}
   .sum-item{flex:1;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;}
@@ -84,28 +121,6 @@
   .sum-item.soon .sum-num{color:var(--amber);}
   .sum-item.ok .sum-num{color:var(--sage);}
 
-  .overview{padding:14px 16px 6px;background:var(--card);border-bottom:1px solid var(--line);}
-  .overview-title{font-size:11px;color:var(--ink-faint);margin-bottom:8px;letter-spacing:.03em;}
-  .ov-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(54px,1fr));gap:6px;}
-  .ov-tile{border-radius:8px;padding:6px 2px;text-align:center;cursor:pointer;background:#EEF0EA;-webkit-tap-highlight-color:transparent;}
-  .ov-tile.state-ok{background:#E9EFE7;}
-  .ov-tile.state-soon{background:#F6ECD8;}
-  .ov-tile.state-overdue{background:#F5E1DD;}
-  .ov-label{font-size:9.5px;color:var(--ink-soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-  .ov-days{font-size:13px;font-weight:700;font-variant-numeric:tabular-nums;color:var(--sage);margin-top:2px;line-height:1;}
-  .ov-tile.state-soon .ov-days{color:var(--amber);}
-  .ov-tile.state-overdue .ov-days{color:var(--brick);}
-  .ov-days.never{font-size:10px;color:var(--brick);}
-
-  .icon-badge{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex:none;background:#EEF0EA;}
-  .icon-badge svg{width:20px;height:20px;display:block;color:var(--ink-soft);}
-  .card.state-ok .icon-badge{background:#E9EFE7;}
-  .card.state-soon .icon-badge{background:#F6ECD8;}
-  .card.state-overdue .icon-badge{background:#F5E1DD;}
-
-  .ov-icon{margin:0 auto 3px;}
-  .ov-icon svg{width:18px;height:18px;display:block;color:var(--ink-soft);}
-
   .list{padding:14px 14px 0;display:flex;flex-direction:column;gap:8px;}
 
   .card{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;transition:border-color .15s ease;}
@@ -113,9 +128,11 @@
   .card.state-soon{border-color:rgba(169,120,31,.3);}
 
   .row{display:flex;align-items:center;gap:12px;padding:14px 14px;cursor:pointer;-webkit-tap-highlight-color:transparent;}
-  .dot{width:9px;height:9px;border-radius:50%;flex:none;background:var(--sage);}
-  .state-soon .dot{background:var(--amber);}
-  .state-overdue .dot{background:var(--brick);}
+  .icon-badge{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex:none;background:#EEF0EA;}
+  .icon-badge svg{width:20px;height:20px;display:block;color:var(--ink-soft);}
+  .card.state-ok .icon-badge{background:#E9EFE7;}
+  .card.state-soon .icon-badge{background:#F6ECD8;}
+  .card.state-overdue .icon-badge{background:#F5E1DD;}
 
   .row-main{flex:1;min-width:0;}
   .name{font-family:'Shippori Mincho', serif;font-weight:600;font-size:16px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
@@ -158,10 +175,26 @@
 <body>
 <div class="wrap">
   <header>
-    <p class="eyebrow">りらくる入間宮寺店</p>
-    <h1>備品 清掃・洗濯 管理板</h1>
-    <p class="sub" id="todayLine"></p>
+    <div>
+      <p class="eyebrow">りらくる入間宮寺店</p>
+      <h1>備品 清掃・洗濯 管理板</h1>
+      <p class="sub" id="todayLine"></p>
+    </div>
+    <button class="gear-btn" id="gearBtn" aria-label="目安日数の設定" type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3.2"/><path d="M12 3.5v2.2M12 18.3v2.2M20.5 12h-2.2M5.7 12H3.5M17.6 6.4l-1.5 1.5M7.9 16.1l-1.5 1.5M17.6 17.6l-1.5-1.5M7.9 7.9L6.4 6.4"/></svg>
+    </button>
   </header>
+
+  <div class="settings-panel" id="settingsPanel">
+    <p class="settings-title">目安日数の設定</p>
+    <p class="settings-desc">カテゴリごとに「そろそろ」「要対応」になる経過日数を設定できます。全員に共有されます。</p>
+    <div id="settingsRows"></div>
+    <div class="settings-actions">
+      <button class="btn btn-ghost" id="settingsCancel" type="button">閉じる</button>
+      <button class="btn" id="settingsSave" type="button">保存する</button>
+    </div>
+    <p class="settings-msg" id="settingsMsg" style="display:none;"></p>
+  </div>
 
   <div class="overview" id="overview"></div>
   <div class="tabbar" id="tabbar"></div>
@@ -169,84 +202,87 @@
   <div id="listRoot"><div class="loading">読み込み中…</div></div>
 
   <footer>
-    誰が・いつ行ったかを記録すると全員に共有されます。日付は今日以外（後日まとめて記録する場合など）も選べます。目安日数は仮の設定です。実態に合わせて調整してください。
+    誰が・いつ行ったかを記録すると全員に共有されます。日付は今日以外（後日まとめて記録する場合など）も選べます。目安日数は右上の歯車アイコンから調整できます。
   </footer>
 </div>
 
 <script>
 // ここに、Google Apps Script をウェブアプリとしてデプロイしたときに発行される URL を、ダブルクォーテーションの中に貼り付けてください。
 // 例: const GAS_URL = "https://script.google.com/macros/s/XXXXXXXXXXXXXXXX/exec";
-const GAS_URL = "https://script.google.com/macros/s/AKfycbwCNWCQl5-sOK-hgx0VOLsFWOS0FGyyrIfdevOsXap0Nu_ZK6-LGVHnlsO8XxK5RLel/exec";
+const GAS_URL = "";
 
 const THERAPISTS = [
   "金丸","重田 将希","アリガ","もりや","シダ","荒井 剛","杏（あんず）","秋元",
   "久保","ぐっちー","ソノベ","サトウ","石田 周平","平野 陽子","粟野 幸子","ヤマギワ","川田"
 ];
 
-// target = 目安日数（この日数を超えたら「そろそろ／要対応」の色になります）。必要に応じて調整してください。
 const ITEMS = [
-  {id:"fan_in_1", cat:"室内扇風機", name:"室内扇風機 ①", target:14},
-  {id:"fan_in_2", cat:"室内扇風機", name:"室内扇風機 ②", target:14},
-  {id:"fan_in_3", cat:"室内扇風機", name:"室内扇風機 ③", target:14},
-  {id:"fan_in_4", cat:"室内扇風機", name:"室内扇風機 ④", target:14},
-  {id:"fan_in_5", cat:"室内扇風機", name:"室内扇風機 ⑤", target:14},
+  {id:"fan_in_1", cat:"家庭用扇風機", name:"家庭用扇風機 ①"},
+  {id:"fan_in_2", cat:"家庭用扇風機", name:"家庭用扇風機 ②"},
+  {id:"fan_in_3", cat:"家庭用扇風機", name:"家庭用扇風機 ③"},
+  {id:"fan_in_4", cat:"家庭用扇風機", name:"家庭用扇風機 ④"},
+  {id:"fan_in_5", cat:"家庭用扇風機", name:"家庭用扇風機 ⑤"},
 
-  {id:"pillow_cover", cat:"枕", name:"枕カバー 洗濯", target:7},
-  {id:"pillow_sun",   cat:"枕", name:"枕 天日干し", target:14},
-  {id:"pillow_wash",  cat:"枕", name:"枕本体 洗濯", target:30},
+  {id:"pillow_cover", cat:"枕", name:"枕カバー 交換"},
+  {id:"pillow_sun",   cat:"枕", name:"枕 天日干し"},
+  {id:"pillow_wash",  cat:"枕", name:"枕本体 洗濯"},
 
-  {id:"sheet_1", cat:"プレミアムベッド", name:"シーツ ① 洗濯", target:3},
-  {id:"sheet_2", cat:"プレミアムベッド", name:"シーツ ② 洗濯", target:3},
+  {id:"sheet_1", cat:"ベッドシーツ", name:"シーツA2 洗濯"},
+  {id:"sheet_2", cat:"ベッドシーツ", name:"シーツA4 洗濯"},
+  {id:"sheet_3", cat:"ベッドシーツ", name:"シーツFree 洗濯"},
 
-  {id:"circ_1", cat:"サーキュレーター", name:"サーキュレーター ①", target:14},
-  {id:"circ_2", cat:"サーキュレーター", name:"サーキュレーター ②", target:14},
+  {id:"circ_1", cat:"サーキュレーター", name:"サーキュレーター ①"},
+  {id:"circ_2", cat:"サーキュレーター", name:"サーキュレーター ②"},
 
-  {id:"garage_1", cat:"ガレージ扇風機", name:"ガレージ扇風機 ①", target:14},
-  {id:"garage_2", cat:"ガレージ扇風機", name:"ガレージ扇風機 ②", target:14},
-  {id:"garage_3", cat:"ガレージ扇風機", name:"ガレージ扇風機 ③", target:14},
+  {id:"garage_1", cat:"業務用大型扇風機", name:"業務用大型扇風機 ①"},
+  {id:"garage_2", cat:"業務用大型扇風機", name:"業務用大型扇風機 ②"},
+  {id:"garage_3", cat:"業務用大型扇風機", name:"業務用大型扇風機 ③"},
 
-  {id:"ac_1", cat:"天井エアコン", name:"エアコンフィルター ①", target:30},
-  {id:"ac_2", cat:"天井エアコン", name:"エアコンフィルター ②", target:30},
-  {id:"ac_3", cat:"天井エアコン", name:"エアコンフィルター ③", target:30},
-  {id:"ac_4", cat:"天井エアコン", name:"エアコンフィルター ④", target:30},
+  {id:"ac_1", cat:"天井備え付けエアコン", name:"エアコンフィルター ①"},
+  {id:"ac_2", cat:"天井備え付けエアコン", name:"エアコンフィルター ②"},
+  {id:"ac_3", cat:"天井備え付けエアコン", name:"エアコンフィルター ③"},
+  {id:"ac_4", cat:"天井備え付けエアコン", name:"エアコンフィルター ④"},
 
-  {id:"toilet_fan", cat:"トイレ", name:"換気扇 清掃", target:30},
+  {id:"toilet_fan", cat:"トイレ換気扇", name:"トイレ換気扇 清掃"},
 ];
-
-const ICONS = {
-  "室内扇風機": '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="24" cy="20" r="13"/><path d="M24 20 L24 9 M24 20 L33 26 M24 20 L15 26" stroke-linecap="round"/><circle cx="24" cy="20" r="2.4" fill="currentColor" stroke="none"/><line x1="24" y1="33" x2="24" y2="41"/><line x1="15" y1="41" x2="33" y2="41" stroke-linecap="round"/></svg>',
-  "枕": '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 20 C8 13 13 12 24 12 C35 12 40 13 40 20 C40 27 35 28 24 28 C13 28 8 27 8 20 Z"/><path d="M17 14 C15 17 15 23 17 26 M31 14 C33 17 33 23 31 26" stroke-width="1.3"/></svg>',
-  "プレミアムベッド": '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 24 Q14 18 20 24 Q26 30 32 24 Q38 18 40 22" stroke-linecap="round"/><rect x="8" y="24" width="32" height="7" rx="1.5"/><line x1="10" y1="31" x2="10" y2="37"/><line x1="38" y1="31" x2="38" y2="37"/></svg>',
-  "サーキュレーター": '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="14" y="7" width="20" height="26" rx="10"/><line x1="18" y1="14" x2="30" y2="14" stroke-width="1.2"/><line x1="18" y1="19" x2="30" y2="19" stroke-width="1.2"/><line x1="18" y1="24" x2="30" y2="24" stroke-width="1.2"/><circle cx="24" cy="14" r="1.6" fill="currentColor" stroke="none"/><line x1="24" y1="33" x2="24" y2="41"/><line x1="16" y1="41" x2="32" y2="41" stroke-linecap="round"/></svg>',
-  "ガレージ扇風機": '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="24" cy="19" r="15"/><path d="M24 19 L24 6 M24 19 L35.5 26.5 M24 19 L12.5 26.5 M24 19 L35.5 11.5 M24 19 L12.5 11.5" stroke-width="1.1"/><circle cx="24" cy="19" r="2.6" fill="currentColor" stroke="none"/><line x1="12" y1="42" x2="24" y2="34" stroke-linecap="round"/><line x1="36" y1="42" x2="24" y2="34" stroke-linecap="round"/><line x1="24" y1="34" x2="24" y2="42" stroke-linecap="round"/></svg>',
-  "天井エアコン": '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="6" y1="10" x2="42" y2="10"/><rect x="10" y="10" width="28" height="12" rx="2"/><path d="M14 26 L11 32 M20 26 L18 33 M28 26 L30 33 M34 26 L37 32" stroke-width="1.4" stroke-linecap="round"/></svg>',
-  "トイレ": '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="12" y="10" width="24" height="24" rx="3"/><line x1="12" y1="16" x2="36" y2="16" stroke-width="1.2"/><line x1="12" y1="21" x2="36" y2="21" stroke-width="1.2"/><line x1="12" y1="26" x2="36" y2="26" stroke-width="1.2"/><line x1="12" y1="31" x2="36" y2="31" stroke-width="1.2"/></svg>',
-};
 
 const SHORT_LABELS = {
   fan_in_1:"扇①", fan_in_2:"扇②", fan_in_3:"扇③", fan_in_4:"扇④", fan_in_5:"扇⑤",
   pillow_cover:"枕カバー", pillow_sun:"枕干し", pillow_wash:"枕本体",
-  sheet_1:"シ①", sheet_2:"シ②",
+  sheet_1:"A2", sheet_2:"A4", sheet_3:"Free",
   circ_1:"サ①", circ_2:"サ②",
-  garage_1:"ガ①", garage_2:"ガ②", garage_3:"ガ③",
+  garage_1:"大①", garage_2:"大②", garage_3:"大③",
   ac_1:"エ①", ac_2:"エ②", ac_3:"エ③", ac_4:"エ④",
   toilet_fan:"換気扇"
 };
 
+const ICONS = {
+  "家庭用扇風機": '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="24" cy="20" r="13"/><path d="M24 20 L24 9 M24 20 L33 26 M24 20 L15 26" stroke-linecap="round"/><circle cx="24" cy="20" r="2.4" fill="currentColor" stroke="none"/><line x1="24" y1="33" x2="24" y2="41"/><line x1="15" y1="41" x2="33" y2="41" stroke-linecap="round"/></svg>',
+  "枕": '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 20 C8 13 13 12 24 12 C35 12 40 13 40 20 C40 27 35 28 24 28 C13 28 8 27 8 20 Z"/><path d="M17 14 C15 17 15 23 17 26 M31 14 C33 17 33 23 31 26" stroke-width="1.3"/></svg>',
+  "ベッドシーツ": '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 24 Q14 18 20 24 Q26 30 32 24 Q38 18 40 22" stroke-linecap="round"/><rect x="8" y="24" width="32" height="7" rx="1.5"/><line x1="10" y1="31" x2="10" y2="37"/><line x1="38" y1="31" x2="38" y2="37"/></svg>',
+  "サーキュレーター": '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="14" y="7" width="20" height="26" rx="10"/><line x1="18" y1="14" x2="30" y2="14" stroke-width="1.2"/><line x1="18" y1="19" x2="30" y2="19" stroke-width="1.2"/><line x1="18" y1="24" x2="30" y2="24" stroke-width="1.2"/><circle cx="24" cy="14" r="1.6" fill="currentColor" stroke="none"/><line x1="24" y1="33" x2="24" y2="41"/><line x1="16" y1="41" x2="32" y2="41" stroke-linecap="round"/></svg>',
+  "業務用大型扇風機": '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="24" cy="19" r="15"/><path d="M24 19 L24 6 M24 19 L35.5 26.5 M24 19 L12.5 26.5 M24 19 L35.5 11.5 M24 19 L12.5 11.5" stroke-width="1.1"/><circle cx="24" cy="19" r="2.6" fill="currentColor" stroke="none"/><line x1="12" y1="42" x2="24" y2="34" stroke-linecap="round"/><line x1="36" y1="42" x2="24" y2="34" stroke-linecap="round"/><line x1="24" y1="34" x2="24" y2="42" stroke-linecap="round"/></svg>',
+  "天井備え付けエアコン": '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="6" y1="10" x2="42" y2="10"/><rect x="10" y="10" width="28" height="12" rx="2"/><path d="M14 26 L11 32 M20 26 L18 33 M28 26 L30 33 M34 26 L37 32" stroke-width="1.4" stroke-linecap="round"/></svg>',
+  "トイレ換気扇": '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="12" y="10" width="24" height="24" rx="3"/><line x1="12" y1="16" x2="36" y2="16" stroke-width="1.2"/><line x1="12" y1="21" x2="36" y2="21" stroke-width="1.2"/><line x1="12" y1="26" x2="36" y2="26" stroke-width="1.2"/><line x1="12" y1="31" x2="36" y2="31" stroke-width="1.2"/></svg>',
+};
+
 const CATS = [
-  {key:"室内扇風機",     accent:"#3E6E86", pale:"#E4EBEF"},
-  {key:"枕",             accent:"#8A6B2E", pale:"#F3ECDA"},
-  {key:"プレミアムベッド", accent:"#7A4F6E", pale:"#F1E6EE"},
-  {key:"サーキュレーター", accent:"#4F6E45", pale:"#E6ECE2"},
-  {key:"ガレージ扇風機",  accent:"#9C5A3D", pale:"#F2E2DA"},
-  {key:"天井エアコン",    accent:"#2E7A78", pale:"#DFEEED"},
-  {key:"トイレ",         accent:"#5B5F7A", pale:"#E4E5EC"},
+  {key:"家庭用扇風機",       accent:"#3E6E86", pale:"#E4EBEF", soonDefault:10, overdueDefault:14},
+  {key:"枕",                 accent:"#8A6B2E", pale:"#F3ECDA", soonDefault:10, overdueDefault:14},
+  {key:"ベッドシーツ",       accent:"#7A4F6E", pale:"#F1E6EE", soonDefault:2,  overdueDefault:3},
+  {key:"サーキュレーター",   accent:"#4F6E45", pale:"#E6ECE2", soonDefault:10, overdueDefault:14},
+  {key:"業務用大型扇風機",   accent:"#9C5A3D", pale:"#F2E2DA", soonDefault:10, overdueDefault:14},
+  {key:"天井備え付けエアコン", accent:"#2E7A78", pale:"#DFEEED", soonDefault:20, overdueDefault:30},
+  {key:"トイレ換気扇",       accent:"#5B5F7A", pale:"#E4E5EC", soonDefault:20, overdueDefault:30},
 ];
 
 let state = {};        // { itemId: [ {recordId, date, person}, ... newest first ] }
+let TARGETS = {};      // { catKey: {soonDays, overdueDays} }
 let openId = null;
 let activeCat = CATS[0].key;
 let loadError = null;
+
+CATS.forEach(c => { TARGETS[c.key] = {soonDays:c.soonDefault, overdueDays:c.overdueDefault}; });
 
 const $ = (sel) => document.querySelector(sel);
 const listRoot = $("#listRoot");
@@ -271,7 +307,6 @@ function daysBetween(iso){
 function escapeHtml(s){
   return String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 }
-function catInfo(key){ return CATS.find(c => c.key === key) || CATS[0]; }
 
 function getLast(item){
   const list = state[item.id];
@@ -279,12 +314,26 @@ function getLast(item){
 }
 function severity(item){
   const last = getLast(item);
+  const t = TARGETS[item.cat] || {soonDays:10, overdueDays:14};
   if(!last) return {level:"overdue", days:null};
   const days = daysBetween(last.date);
-  const ratio = days / item.target;
-  if(ratio >= 1) return {level:"overdue", days};
-  if(ratio >= 0.7) return {level:"soon", days};
+  if(days >= t.overdueDays) return {level:"overdue", days};
+  if(days >= t.soonDays) return {level:"soon", days};
   return {level:"ok", days};
+}
+
+function renderTabs(){
+  tabbarRoot.innerHTML = CATS.map(c => {
+    const active = c.key === activeCat;
+    const style = active ? `background:${c.accent};` : "";
+    const dotStyle = `background:${active ? "#fff" : c.accent};`;
+    return `<div class="tab ${active ? "active" : ""}" data-cat="${escapeHtml(c.key)}" style="${style}">
+      <span class="tdot" style="${dotStyle}"></span>${escapeHtml(c.key)}
+    </div>`;
+  }).join("");
+  tabbarRoot.querySelectorAll(".tab").forEach(el => {
+    el.addEventListener("click", () => { activeCat = el.dataset.cat; openId = null; render(); });
+  });
 }
 
 function renderOverview(){
@@ -316,20 +365,6 @@ function renderOverview(){
       render();
       tabbarRoot.scrollIntoView({behavior:"smooth", block:"start"});
     });
-  });
-}
-
-function renderTabs(){
-  tabbarRoot.innerHTML = CATS.map(c => {
-    const active = c.key === activeCat;
-    const style = active ? `background:${c.accent};` : "";
-    const dotStyle = `background:${active ? "#fff" : c.accent};`;
-    return `<div class="tab ${active ? "active" : ""}" data-cat="${escapeHtml(c.key)}" style="${style}">
-      <span class="tdot" style="${dotStyle}"></span>${escapeHtml(c.key)}
-    </div>`;
-  }).join("");
-  tabbarRoot.querySelectorAll(".tab").forEach(el => {
-    el.addEventListener("click", () => { activeCat = el.dataset.cat; openId = null; render(); });
   });
 }
 
@@ -449,6 +484,14 @@ async function apiGet(){
   return data.records;
 }
 
+async function apiGetTargets(){
+  const res = await fetch(GAS_URL + "?action=targets");
+  if(!res.ok) throw new Error("サーバーエラー ("+res.status+")");
+  const data = await res.json();
+  if(!data.ok) throw new Error(data.error || "不明なエラー");
+  return data.targets || [];
+}
+
 async function apiAdd(record){
   const res = await fetch(GAS_URL, {
     method: "POST",
@@ -469,6 +512,16 @@ async function apiDelete(recordId){
   if(!data.ok) throw new Error(data.error || "削除に失敗しました");
 }
 
+async function apiSaveTargets(targets){
+  const res = await fetch(GAS_URL, {
+    method: "POST",
+    headers: {"Content-Type": "text/plain;charset=utf-8"},
+    body: JSON.stringify({action:"saveTargets", targets})
+  });
+  const data = await res.json();
+  if(!data.ok) throw new Error(data.error || "保存に失敗しました");
+}
+
 function rebuildStateFromRecords(records){
   state = {};
   records.forEach(r => {
@@ -480,9 +533,21 @@ function rebuildStateFromRecords(records){
   });
 }
 
+function applyTargets(targetRows){
+  targetRows.forEach(t => {
+    if(TARGETS[t.category]){
+      const soon = Number(t.soonDays);
+      const overdue = Number(t.overdueDays);
+      if(!isNaN(soon)) TARGETS[t.category].soonDays = soon;
+      if(!isNaN(overdue)) TARGETS[t.category].overdueDays = overdue;
+    }
+  });
+}
+
 async function loadAll(){
-  const records = await apiGet();
+  const [records, targetRows] = await Promise.all([apiGet(), apiGetTargets()]);
   rebuildStateFromRecords(records);
+  applyTargets(targetRows);
 }
 
 async function recordAction(itemId, date, person){
@@ -523,6 +588,79 @@ async function refresh(){
   }
   render();
 }
+
+function renderSettingsRows(){
+  const rowsHTML = CATS.map(c => {
+    const t = TARGETS[c.key];
+    return `<div class="settings-row">
+      <div class="settings-cat"><span class="icon-mini">${ICONS[c.key] || ""}</span>${escapeHtml(c.key)}</div>
+      <div class="settings-fields">
+        <div class="settings-field">
+          <label>そろそろ</label>
+          <input type="number" min="1" step="1" class="soon-input" data-cat="${escapeHtml(c.key)}" value="${t.soonDays}">
+        </div>
+        <div class="settings-field">
+          <label>要対応</label>
+          <input type="number" min="1" step="1" class="overdue-input" data-cat="${escapeHtml(c.key)}" value="${t.overdueDays}">
+        </div>
+      </div>
+    </div>`;
+  }).join("");
+  document.getElementById("settingsRows").innerHTML = rowsHTML;
+}
+
+function openSettings(){
+  renderSettingsRows();
+  document.getElementById("settingsMsg").style.display = "none";
+  document.getElementById("settingsPanel").classList.add("open");
+}
+function closeSettings(){
+  document.getElementById("settingsPanel").classList.remove("open");
+}
+
+async function saveSettings(){
+  const msg = document.getElementById("settingsMsg");
+  const newTargets = CATS.map(c => {
+    const soonEl = document.querySelector(`.soon-input[data-cat="${CSS.escape(c.key)}"]`);
+    const overdueEl = document.querySelector(`.overdue-input[data-cat="${CSS.escape(c.key)}"]`);
+    return {
+      category: c.key,
+      soonDays: Number(soonEl.value),
+      overdueDays: Number(overdueEl.value)
+    };
+  });
+  for(const t of newTargets){
+    if(!t.soonDays || !t.overdueDays || t.soonDays <= 0 || t.overdueDays <= 0){
+      msg.textContent = "1以上の数字を入力してください。";
+      msg.className = "settings-msg err";
+      msg.style.display = "block";
+      return;
+    }
+    if(t.soonDays > t.overdueDays){
+      msg.textContent = `「${t.category}」は、そろそろ日数が要対応日数より小さくなるように設定してください。`;
+      msg.className = "settings-msg err";
+      msg.style.display = "block";
+      return;
+    }
+  }
+  msg.textContent = "保存中…";
+  msg.className = "settings-msg";
+  msg.style.display = "block";
+  try{
+    await apiSaveTargets(newTargets);
+    applyTargets(newTargets);
+    render();
+    msg.textContent = "保存しました。";
+    setTimeout(() => { closeSettings(); }, 700);
+  }catch(e){
+    msg.textContent = "保存に失敗しました。通信状況を確認してもう一度お試しください。";
+    msg.className = "settings-msg err";
+  }
+}
+
+document.getElementById("gearBtn").addEventListener("click", openSettings);
+document.getElementById("settingsCancel").addEventListener("click", closeSettings);
+document.getElementById("settingsSave").addEventListener("click", saveSettings);
 
 async function init(){
   $("#todayLine").textContent = new Date().toLocaleDateString("ja-JP", {year:"numeric", month:"long", day:"numeric", weekday:"short"});
